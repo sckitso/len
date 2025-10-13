@@ -469,15 +469,33 @@
             document.getElementById('homeView').classList.remove('active');
             document.getElementById('privacyView').classList.remove('active');
             
-            // Show selected view
+            // Show selected view and update URL
             if (view === 'home') {
                 document.getElementById('homeView').classList.add('active');
+                window.history.pushState({view: 'home'}, '', '/');
                 window.scrollTo(0, 0);
             } else if (view === 'privacy') {
                 document.getElementById('privacyView').classList.add('active');
+                window.history.pushState({view: 'privacy'}, '', '/privacypolicy');
                 window.scrollTo(0, 0);
             }
         }
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function(event) {
+            if (event.state && event.state.view) {
+                showView(event.state.view);
+            } else {
+                showView('home');
+            }
+        });
+
+        // Check URL on page load
+        window.addEventListener('load', function() {
+            if (window.location.pathname === '/privacypolicy') {
+                showView('privacy');
+            }
+        });
     </script>
 </body>
 </html>
